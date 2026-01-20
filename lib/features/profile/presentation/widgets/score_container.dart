@@ -14,7 +14,7 @@ class ScoreContainer extends StatelessWidget {
       width: 109,
       padding: context.paddingS,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(

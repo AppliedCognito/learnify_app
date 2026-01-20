@@ -30,18 +30,21 @@ class CommonAppbar extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   _statPill(
+                    context,
                     icon: LucideIcons.trophy,
                     value: '5',
                     color: const Color(0xFF7758FF),
                   ),
                   const Gap(8),
                   _statPill(
+                    context,
                     icon: LucideIcons.flame,
                     value: '56',
                     color: const Color(0xFFFF8484),
                   ),
                   const Gap(8),
                   _statPill(
+                    context,
                     icon: LucideIcons.zap,
                     value: '1250',
                     color: const Color(0xFFFF6CFD),
@@ -54,14 +57,17 @@ class CommonAppbar extends StatelessWidget {
                     child: Container(
                       width: 30,
                       height: 30,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         LucideIcons.user,
                         size: 18,
-                        color: Colors.black,
+                        color:
+                            Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black,
                       ),
                     ),
                   ),
@@ -74,7 +80,8 @@ class CommonAppbar extends StatelessWidget {
     );
   }
 
-  Widget _statPill({
+  Widget _statPill(
+    BuildContext context, {
     required IconData icon,
     required String value,
     required Color color,
@@ -82,7 +89,7 @@ class CommonAppbar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -91,7 +98,13 @@ class CommonAppbar extends StatelessWidget {
           const Gap(4),
           Text(
             value,
-            style: const TextStyle(color: Colors.black, fontSize: 12),
+            style: TextStyle(
+              color:
+                  Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black,
+              fontSize: 12,
+            ),
           ),
         ],
       ),

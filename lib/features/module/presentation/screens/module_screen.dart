@@ -91,9 +91,9 @@ void _showPaperSwitchBottomSheet(
     isScrollControlled: true,
     builder:
         (context) => Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           ),
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -164,7 +164,9 @@ class _PaperOption extends StatelessWidget {
           color:
               isSelected
                   ? Theme.of(context).primaryColor.withOpacity(0.05)
-                  : Colors.grey[50],
+                  : (Theme.of(context).brightness == Brightness.dark
+                      ? Theme.of(context).cardColor
+                      : Colors.grey[50]),
           borderRadius: BorderRadius.circular(12),
           border:
               isSelected
@@ -182,7 +184,9 @@ class _PaperOption extends StatelessWidget {
                 color:
                     isSelected
                         ? Theme.of(context).primaryColor
-                        : Colors.black87,
+                        : (Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white
+                            : Colors.black87),
               ),
             ),
             if (isSelected)

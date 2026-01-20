@@ -17,7 +17,10 @@ class ProfileScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: const Color(0xff6A5DE5),
+        backgroundColor:
+            Theme.of(context).brightness == Brightness.dark
+                ? const Color(0xFF1E1E1E)
+                : const Color(0xff6A5DE5),
         body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
@@ -31,7 +34,10 @@ class ProfileScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CircleAvatar(
-                            backgroundColor: Colors.white,
+                            backgroundColor:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? const Color(0xFF2D2D2D)
+                                    : Colors.white,
                             radius: 15.5,
                             child: IconButton(
                               onPressed: () {
@@ -40,12 +46,19 @@ class ProfileScreen extends StatelessWidget {
                               icon: Icon(
                                 LucideIcons.chevronLeft,
                                 size: 15,
-                                color: Colors.black,
+                                color:
+                                    Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.white
+                                        : Colors.black,
                               ),
                             ),
                           ),
                           CircleAvatar(
-                            backgroundColor: Colors.white,
+                            backgroundColor:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? const Color(0xFF2D2D2D)
+                                    : Colors.white,
                             radius: 15.5,
                             child: IconButton(
                               onPressed: () {
@@ -56,7 +69,11 @@ class ProfileScreen extends StatelessWidget {
                               icon: Icon(
                                 LucideIcons.settings,
                                 size: 15,
-                                color: Colors.black,
+                                color:
+                                    Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.white
+                                        : Colors.black,
                               ),
                             ),
                           ),
@@ -83,7 +100,10 @@ class ProfileScreen extends StatelessWidget {
                       width: 350,
                       padding: context.paddingS,
                       decoration: BoxDecoration(
-                        color: const Color(0xff4C3DD7),
+                        color:
+                            Theme.of(context).brightness == Brightness.dark
+                                ? const Color(0xFF2D2D2D)
+                                : const Color(0xff4C3DD7),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Row(
@@ -104,7 +124,10 @@ class ProfileScreen extends StatelessWidget {
           body: Container(
             padding: context.paddingHorizontal,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color:
+                  Theme.of(context).brightness == Brightness.dark
+                      ? const Color(0xFF121212)
+                      : Colors.white,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20),
                 topRight: Radius.circular(20),
@@ -114,9 +137,15 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 Gap(16),
                 TabBar(
-                  labelColor: Colors.black,
+                  labelColor:
+                      Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black,
                   unselectedLabelColor: Colors.grey,
-                  indicatorColor: Colors.black,
+                  indicatorColor:
+                      Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black,
                   labelStyle: const TextStyle(fontWeight: FontWeight.bold),
                   dividerColor: Colors.grey,
                   indicatorSize: TabBarIndicatorSize.tab,

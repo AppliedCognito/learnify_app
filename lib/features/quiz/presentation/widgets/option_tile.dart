@@ -41,7 +41,12 @@ class OptionTile extends ConsumerWidget {
           color: isSelected ? Colors.orangeAccent : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? Colors.orangeAccent : Colors.black,
+            color:
+                isSelected
+                    ? Colors.orangeAccent
+                    : (Theme.of(context).brightness == Brightness.dark
+                        ? Colors.grey.shade700
+                        : Colors.black),
           ),
         ),
         child: Text(optionText, style: context.textTheme.bodyLarge),

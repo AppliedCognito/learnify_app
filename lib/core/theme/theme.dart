@@ -17,6 +17,7 @@ class AppTheme {
     outlinedButtonTheme: AppButtonTheme.outlinedButtonTheme,
     textTheme: AppTextTheme.lightTextTheme,
     scaffoldBackgroundColor: Colors.white,
+    cardColor: Colors.white,
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -25,6 +26,12 @@ class AppTheme {
     brightness: Brightness.dark,
     primarySwatch: Colors.blue,
     fontFamily: GoogleFonts.poppins().fontFamily,
+    appBarTheme: AppAppBarTheme.darkAppBarTheme,
+    elevatedButtonTheme: AppButtonTheme.darkElevatedButtonTheme,
+    outlinedButtonTheme: AppButtonTheme.darkOutlinedButtonTheme,
     textTheme: AppTextTheme.darkTextTheme,
+    scaffoldBackgroundColor: const Color(0xFF121212),
+    cardColor: const Color(0xFF1E1E1E),
+    dividerColor: Colors.white24,
   );
 }

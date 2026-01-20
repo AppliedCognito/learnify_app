@@ -1,32 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:learnify_app/core/providers/theme_provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import 'setting_switch_tile.dart';
 
-class AppearanceSection extends StatefulWidget {
+class AppearanceSection extends ConsumerWidget {
   const AppearanceSection({super.key});
 
   @override
-  State<AppearanceSection> createState() => _AppearanceSectionState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeProvider);
+    final isDarkMode = themeMode == ThemeMode.dark;
 
-class _AppearanceSectionState extends State<AppearanceSection> {
-  bool darkMode = false;
-
-  @override
-  Widget build(BuildContext context) {
     return SectionCard(
       title: 'Appearance',
-      icon: LucideIcons.sun,
+      icon: isDarkMode ? LucideIcons.moon : LucideIcons.sun,
       children: [
         SettingSwitchTile(
           title: 'Dark Mode',
           subtitle: 'Use dark theme',
-          value: darkMode,
+          value: isDarkMode,
           onChanged: (val) {
-            setState(() {
-              darkMode = val;
-            });
+            ref.read(themeProvider.notifier).toggleTheme();
           },
         ),
       ],

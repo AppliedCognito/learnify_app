@@ -56,7 +56,10 @@ class QuizCompleteScreen extends ConsumerWidget {
                   textAlign: TextAlign.center,
                   style: context.textTheme.headlineLarge?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color:
+                        Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white
+                            : Colors.black,
                   ),
                 ),
                 Gap(24),
@@ -84,11 +87,18 @@ class QuizCompleteScreen extends ConsumerWidget {
                 ),
                 Gap(50),
                 CommonButton(
-                  backgroundColor: Colors.white,
+                  backgroundColor:
+                      Theme.of(context).brightness == Brightness.dark
+                          ? const Color(0xFF2D2D2D)
+                          : Colors.white,
                   widget: Text(
                     'Try Again',
                     style: context.textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
+                      color:
+                          Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              : Colors.black,
                     ),
                   ),
                   onPressed: () {

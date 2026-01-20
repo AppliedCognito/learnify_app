@@ -23,16 +23,22 @@ class ProfileTab extends StatelessWidget {
               margin: context.paddingS,
               padding: context.paddingXS,
               decoration: BoxDecoration(
-                color: Color(0xffF2F2F2),
+                color:
+                    Theme.of(context).brightness == Brightness.dark
+                        ? const Color(0xFF2D2D2D)
+                        : const Color(0xffF2F2F2),
                 borderRadius: BorderRadius.circular(15),
               ),
               child: TabBar(
                 indicator: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(15),
                 ),
                 indicatorSize: TabBarIndicatorSize.tab,
-                labelColor: AppColors.black,
+                labelColor:
+                    Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : AppColors.black,
                 labelStyle: context.textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),

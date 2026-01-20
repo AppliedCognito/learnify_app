@@ -16,10 +16,12 @@ class AchievementTab extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildAchievementCard(
+                context,
                 'assets/images/start_test.png',
                 'Ranked 1st',
               ),
               _buildAchievementCard(
+                context,
                 'assets/images/start_test.png',
                 '100 Questions',
               ),
@@ -31,13 +33,19 @@ class AchievementTab extends StatelessWidget {
     );
   }
 
-  Widget _buildAchievementCard(String imagePath, String title) {
+  Widget _buildAchievementCard(
+    BuildContext context,
+    String imagePath,
+    String title,
+  ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       width: 160,
       height: 160,
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
       decoration: BoxDecoration(
-        color: const Color(0xffF2F2F2),
+        color: isDark ? const Color(0xFF2D2D2D) : const Color(0xffF2F2F2),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -46,7 +54,11 @@ class AchievementTab extends StatelessWidget {
           const Gap(12),
           Text(
             title,
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+              color: isDark ? Colors.white : Colors.black,
+            ),
             textAlign: TextAlign.center,
           ),
         ],

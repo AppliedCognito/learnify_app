@@ -122,7 +122,10 @@ class _QuizAttemptScreenState extends ConsumerState<QuizAttemptScreen> {
     final isAllAnswered = answers.length == questions.length;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF7758FF),
+      backgroundColor:
+          Theme.of(context).brightness == Brightness.dark
+              ? const Color(0xFF1E1E1E)
+              : const Color(0xFF7758FF),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -199,7 +202,10 @@ class _QuizAttemptScreenState extends ConsumerState<QuizAttemptScreen> {
                     child: Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color:
+                            Theme.of(context).brightness == Brightness.dark
+                                ? const Color(0xFF2D2D2D)
+                                : Colors.white,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: SingleChildScrollView(

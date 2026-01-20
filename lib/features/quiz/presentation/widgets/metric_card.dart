@@ -14,21 +14,27 @@ class MetricCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardColor = isDark ? const Color(0xFF1E1E1E) : Colors.white;
+    final headerColor = isDark ? const Color(0xFF2D2D2D) : Colors.black;
+    final borderColor = isDark ? Colors.grey.shade700 : Colors.black;
+    final textColor = isDark ? Colors.white : Colors.black;
+
     return Container(
       width: 105,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: cardColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.black, width: 1.5),
+        border: Border.all(color: borderColor, width: 1.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Top Black Section
+          // Top Section
           Container(
-            decoration: const BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.only(
+            decoration: BoxDecoration(
+              color: headerColor,
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(14),
                 topRight: Radius.circular(14),
               ),
@@ -37,8 +43,8 @@ class MetricCard extends StatelessWidget {
             child: Center(
               child: Text(
                 title,
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: isDark ? Colors.white70 : Colors.white,
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
                 ),
@@ -46,21 +52,21 @@ class MetricCard extends StatelessWidget {
             ),
           ),
 
-          // Bottom White Section
+          // Bottom Section
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children: [
-                Icon(icon, size: 24, color: Colors.black),
+                Icon(icon, size: 24, color: textColor),
                 const SizedBox(height: 6),
                 Text(
                   value,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: textColor,
                   ),
                 ),
               ],

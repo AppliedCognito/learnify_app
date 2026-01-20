@@ -8,10 +8,14 @@ class ProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isDark ? const Color(0xFF2D2D2D) : Colors.white;
+    final borderColor = isDark ? const Color(0xFF2D2D2D) : Colors.white;
+
     return Container(
       height: 40,
       decoration: BoxDecoration(
-        color: Colors.white, // Background color
+        color: backgroundColor, // Background color
         borderRadius: BorderRadius.circular(50),
       ),
       child: Stack(
@@ -24,7 +28,7 @@ class ProgressBar extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFB444), // Orange fill color
                   borderRadius: BorderRadius.circular(50),
-                  border: Border.all(color: Colors.white, width: 4),
+                  border: Border.all(color: borderColor, width: 4),
                 ),
               );
             },

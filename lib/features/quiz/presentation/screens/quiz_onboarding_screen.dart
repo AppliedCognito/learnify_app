@@ -34,12 +34,18 @@ class QuizOnboardingScreen extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   child: CircleAvatar(
-                    backgroundColor: Color(0xFFF0F0F0),
+                    backgroundColor:
+                        Theme.of(context).brightness == Brightness.dark
+                            ? const Color(0xFF2D2D2D)
+                            : const Color(0xFFF0F0F0),
                     radius: 18,
                     child: Icon(
                       LucideIcons.x,
                       size: 18,
-                      color: AppColors.black,
+                      color:
+                          Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              : AppColors.black,
                     ),
                   ),
                 ),

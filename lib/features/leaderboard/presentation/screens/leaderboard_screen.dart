@@ -15,7 +15,10 @@ class LeaderboardScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: AppColors.primary,
+        backgroundColor:
+            Theme.of(context).brightness == Brightness.dark
+                ? const Color(0xFF1E1E1E)
+                : AppColors.primary,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(160),
           child: Container(
@@ -36,7 +39,10 @@ class LeaderboardScreen extends StatelessWidget {
                   height: 40,
                   margin: context.paddingHorizontal,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF4E40BD),
+                    color:
+                        Theme.of(context).brightness == Brightness.dark
+                            ? const Color(0xFF2D2D2D)
+                            : const Color(0xFF4E40BD),
                     borderRadius: BorderRadius.circular(24),
                   ),
                   child: TabBar(
@@ -77,9 +83,9 @@ class LeaderboardScreen extends StatelessWidget {
                 margin: const EdgeInsets.only(
                   top: AppConstants.leaderboardTopPadding,
                 ),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(32),
                     topRight: Radius.circular(32),
                   ),
