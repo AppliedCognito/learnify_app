@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/quiz_model.dart';
 
-final currentQuestionProvider = StateProvider<int>((ref) => 0);
-final answersProvider = StateProvider<Map<int, int>>((ref) => {});
+final currentQuestionProvider = StateProvider.autoDispose<int>((ref) => 0);
+final answersProvider = StateProvider.autoDispose<Map<int, int>>((ref) => {});
 
 // Sample Questions
 final questionsProvider = Provider<List<Question>>(

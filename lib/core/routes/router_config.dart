@@ -11,16 +11,11 @@ import 'package:learnify_app/features/settings/presentation/screens/settings_scr
 import 'package:learnify_app/presentation/bottom_nav/bottom_nav_scaffold.dart';
 import '../../features/quiz/presentation/screens/quiz_attempt_screen.dart';
 
-
 /// Main GoRouter configuration for app navigation
 final GoRouter appRouter = GoRouter(
   routes: [
-
     // ------------------ Splash ------------------
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const SplashScreen(),
-    ),
+    GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
 
     // ------------------ Authentication & Onboarding ------------------
     GoRoute(
@@ -33,7 +28,7 @@ final GoRouter appRouter = GoRouter(
       name: RouterConstants.registerRouteName,
       builder: (context, state) => const RegisterScreen(),
     ),
-     GoRoute(
+    GoRoute(
       path: '/onboardingScreen',
       name: RouterConstants.onboardingRouteName,
       builder: (context, state) => const OnboardingScreen(),
@@ -72,7 +67,14 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/quizCompleteScreen',
       name: RouterConstants.quizCompleteRouteName,
-      builder: (context, state) => const QuizCompleteScreen(),
+      builder: (context, state) {
+        final extras = state.extra as Map<String, dynamic>? ?? {};
+        return QuizCompleteScreen(
+          correctAnswers: extras['correctAnswers'] ?? 0,
+          totalQuestions: extras['totalQuestions'] ?? 0,
+          timeTakenInSeconds: extras['timeTakenInSeconds'] ?? 0,
+        );
+      },
     ),
   ],
 );

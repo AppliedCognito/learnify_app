@@ -8,7 +8,8 @@ import '../provider/quiz_provider.dart';
 import '../widgets/progress_bar.dart';
 import '../widgets/question_progress_indicator.dart';
 import '../widgets/option_tile.dart';
-import 'quiz_completed_screen.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/routes/router_constants.dart';
 
 class QuizAttemptScreen extends ConsumerStatefulWidget {
   const QuizAttemptScreen({super.key});
@@ -62,9 +63,26 @@ class _QuizAttemptScreenState extends ConsumerState<QuizAttemptScreen> {
 
   void _submitQuiz() {
     _timer?.cancel();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const QuizCompleteScreen()),
+
+    final questions = ref.read(questionsProvider);
+    final answers = ref.read(answersProvider);
+
+    int correctAnswers = 0;
+    for (int i = 0; i < questions.length; i++) {
+      if (answers[i] == questions[i].correctAnswerIndex) {
+        correctAnswers++;
+      }
+    }
+
+    final timeTaken = _totalTimeInSeconds - _remainingTimeInSeconds;
+
+    context.pushReplacementNamed(
+      RouterConstants.quizCompleteRouteName,
+      extra: {
+        'correctAnswers': correctAnswers,
+        'totalQuestions': questions.length,
+        'timeTakenInSeconds': timeTaken,
+      },
     );
   }
 
