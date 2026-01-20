@@ -4,10 +4,13 @@ import 'package:go_router/go_router.dart';
 import 'package:learnify_app/core/extensions/context_extensions.dart';
 import 'package:learnify_app/core/routes/router_constants.dart';
 import 'package:learnify_app/core/theme/colors/app_colors.dart';
+import 'package:learnify_app/core/models/test_model.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class StartTestWidget extends StatelessWidget {
-  const StartTestWidget({super.key});
+  final TestModel test;
+
+  const StartTestWidget({super.key, required this.test});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,7 @@ class StartTestWidget extends StatelessWidget {
                   SizedBox(
                     height: context.screenHeight * 0.12,
                     child: Image.asset(
-                      'assets/images/start_test.png',
+                      test.imageUrl ?? 'assets/images/start_test.png',
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -45,7 +48,7 @@ class StartTestWidget extends StatelessWidget {
 
               // Title
               Text(
-                'Take a mock test',
+                test.title,
                 style: context.textTheme.titleMedium?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -55,7 +58,7 @@ class StartTestWidget extends StatelessWidget {
 
               // Subtitle
               Text(
-                'Practice basic arithmetic and problem solving',
+                test.description,
                 style: context.textTheme.labelMedium?.copyWith(
                   color: Colors.white70,
                 ),
@@ -69,7 +72,7 @@ class StartTestWidget extends StatelessWidget {
                   Icon(LucideIcons.bookOpen, color: Colors.white, size: 18),
                   const SizedBox(width: 6),
                   Text(
-                    '10 q.',
+                    '${test.totalQuestions} q.',
                     style: context.textTheme.labelMedium?.copyWith(
                       color: Colors.white70,
                     ),
@@ -80,7 +83,7 @@ class StartTestWidget extends StatelessWidget {
                   Icon(LucideIcons.clock, color: Colors.white, size: 18),
                   const SizedBox(width: 6),
                   Text(
-                    '180 m.',
+                    '${test.duration} m.',
                     style: context.textTheme.labelMedium?.copyWith(
                       color: Colors.white70,
                     ),

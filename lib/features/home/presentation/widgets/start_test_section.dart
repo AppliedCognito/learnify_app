@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:learnify_app/core/theme/colors/app_colors.dart';
+import 'package:learnify_app/core/providers/database_provider.dart';
 import 'package:learnify_app/features/home/presentation/providers/start_test_provider.dart';
 import 'package:learnify_app/features/home/presentation/widgets/start_test_widget.dart';
 
@@ -12,13 +13,10 @@ class StartTestSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = ref.watch(startTestIndexProvider);
+    final featuredTests = ref.watch(featuredTestsProvider);
 
-    final List<Widget> cards = const [
-      StartTestWidget(),
-      StartTestWidget(),
-      StartTestWidget(),
-      StartTestWidget(),
-    ];
+    final List<Widget> cards =
+        featuredTests.map((test) => StartTestWidget(test: test)).toList();
 
     return Column(
       children: [

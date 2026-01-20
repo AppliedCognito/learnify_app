@@ -36,7 +36,7 @@ class SettingSwitchTile extends StatelessWidget {
       ),
       value: value,
       onChanged: onChanged,
-      activeColor: Colors.deepPurple,
+      activeThumbColor: Colors.deepPurple,
     );
   }
 }

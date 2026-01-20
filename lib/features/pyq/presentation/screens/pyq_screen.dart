@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 import 'package:learnify_app/core/extensions/context_extensions.dart';
 import 'package:learnify_app/core/theme/colors/app_colors.dart';
+import 'package:learnify_app/core/providers/database_provider.dart';
 import 'package:learnify_app/presentation/widgets/common_appbar.dart';
 import 'package:learnify_app/features/pyq/presentation/widgets/pyq_card.dart';
 
-class PreviousYearQuestionsScreen extends StatelessWidget {
+class PreviousYearQuestionsScreen extends ConsumerWidget {
   const PreviousYearQuestionsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -103,26 +105,31 @@ class PreviousYearQuestionsScreen extends StatelessWidget {
                 ),
               ],
           body: TabBarView(
-            children: [_buildGrid(context), _buildGrid(context)],
+            children: [
+              _buildGrid(context, ref, 'Paper I'),
+              _buildGrid(context, ref, 'Paper II'),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildGrid(BuildContext context) {
+  Widget _buildGrid(BuildContext context, WidgetRef ref, String paper) {
+    final pyqTests = ref.watch(pyqByPaperProvider(paper));
+
     return Padding(
       padding: context.paddingHorizontal.add(const EdgeInsets.only(top: 16)),
       child: GridView.builder(
         padding: EdgeInsets.zero,
-        itemCount: 6,
+        itemCount: pyqTests.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           mainAxisSpacing: 16,
           crossAxisSpacing: 16,
           childAspectRatio: 0.75,
         ),
-        itemBuilder: (context, index) => const PYQCard(),
+        itemBuilder: (context, index) => PYQCard(test: pyqTests[index]),
       ),
     );
   }

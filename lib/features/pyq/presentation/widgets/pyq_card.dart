@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:learnify_app/core/extensions/context_extensions.dart';
 import 'package:learnify_app/core/theme/colors/app_colors.dart';
+import 'package:learnify_app/core/models/test_model.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class PYQCard extends StatelessWidget {
-  const PYQCard({super.key});
+  final TestModel test;
+
+  const PYQCard({super.key, required this.test});
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +35,10 @@ class PYQCard extends StatelessWidget {
             ],
           ),
           const Gap(12),
-          Text('PYQ 2024 SET 2', style: context.textTheme.titleSmall),
+          Text(test.title, style: context.textTheme.titleSmall),
           const Gap(6),
           Text(
-            'Practice basic arithmetic\nand problem solving',
+            test.description,
             style: context.textTheme.labelSmall?.copyWith(
               color: Colors.grey[600],
             ),
@@ -49,7 +52,10 @@ class PYQCard extends StatelessWidget {
                 color: AppColors.onSurface,
               ),
               const Gap(4),
-              Text('10 Q.', style: context.textTheme.labelSmall),
+              Text(
+                '${test.totalQuestions} Q.',
+                style: context.textTheme.labelSmall,
+              ),
               const Gap(12),
               const Icon(
                 LucideIcons.clock,
@@ -57,7 +63,7 @@ class PYQCard extends StatelessWidget {
                 color: AppColors.onSurface,
               ),
               const Gap(4),
-              Text('180 m.', style: context.textTheme.labelSmall),
+              Text('${test.duration} m.', style: context.textTheme.labelSmall),
             ],
           ),
         ],

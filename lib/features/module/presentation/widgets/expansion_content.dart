@@ -1,26 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:learnify_app/core/extensions/context_extensions.dart';
+import 'package:learnify_app/core/providers/database_provider.dart';
 import 'package:learnify_app/presentation/widgets/common_test_widget.dart';
 
-class ExpansionContent extends StatefulWidget {
-  const ExpansionContent({super.key});
+class ExpansionContent extends ConsumerWidget {
+  final String moduleId;
+
+  const ExpansionContent({super.key, required this.moduleId});
 
   @override
-  State<ExpansionContent> createState() => _ExpansionContentState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tests = ref.watch(testsForModuleProvider(moduleId));
 
-class _ExpansionContentState extends State<ExpansionContent> {
-  // int _currentIndex = 0;
+    if (tests.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
-  final List<Map<String, int>> testData = [
-    {'total': 10, 'answered': 3},
-    {'total': 15, 'answered': 7},
-    {'total': 5, 'answered': 2},
-  ];
-
-  @override
-  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -31,23 +28,24 @@ class _ExpansionContentState extends State<ExpansionContent> {
           child: Padding(
             padding: context.paddingHorizontal,
             child: Row(
-              children: List.generate(testData.length, (index) {
-                final item = testData[index];
-                return Padding(
-                  padding: const EdgeInsets.only(
-                    right: 8.0,
-                  ), // Spacing between items
-                  child: SizedBox(
-                    width:
-                        MediaQuery.of(context).size.width *
-                        0.6, // Control card width
-                    child: CommonTestWidget(
-                      totalQuestions: item['total']!,
-                      answeredQuestions: item['answered']!,
-                    ),
-                  ),
-                );
-              }),
+              children:
+                  tests.map((test) {
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                        right: 8.0,
+                      ), // Spacing between items
+                      child: SizedBox(
+                        width:
+                            MediaQuery.of(context).size.width *
+                            0.6, // Control card width
+                        child: CommonTestWidget(
+                          test: test,
+                          totalQuestions: test.totalQuestions,
+                          answeredQuestions: test.answeredQuestions,
+                        ),
+                      ),
+                    );
+                  }).toList(),
             ),
           ),
         ),

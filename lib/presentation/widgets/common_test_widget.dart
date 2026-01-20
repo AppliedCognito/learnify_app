@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:learnify_app/core/extensions/context_extensions.dart';
 import 'package:learnify_app/core/theme/colors/app_colors.dart';
+import 'package:learnify_app/core/models/test_model.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class CommonTestWidget extends StatelessWidget {
+  final TestModel? test;
   final int totalQuestions;
   final int answeredQuestions;
   final bool highlight;
 
   const CommonTestWidget({
     super.key,
+    this.test,
     this.totalQuestions = 10,
     this.answeredQuestions = 6,
     this.highlight = false,
@@ -18,6 +21,11 @@ class CommonTestWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Use test data if available, otherwise use provided values
+    final title = test?.title ?? 'Math Fundamentals';
+    final description =
+        test?.description ?? 'Practice basic arithmetic and problem solving';
+
     // Calculate progress
     double progress =
         totalQuestions == 0 ? 0 : answeredQuestions / totalQuestions;
@@ -34,7 +42,7 @@ class CommonTestWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Math Fundamentals',
+            title,
             style: context.textTheme.bodyLarge?.copyWith(
               fontWeight: FontWeight.w700,
               fontSize: 16,
@@ -42,7 +50,7 @@ class CommonTestWidget extends StatelessWidget {
           ),
           const Gap(6),
           Text(
-            'Practice basic arithmetic and problem solving',
+            description,
             style: context.textTheme.labelMedium?.copyWith(
               color: Colors.grey.shade600,
               fontWeight: FontWeight.w600,

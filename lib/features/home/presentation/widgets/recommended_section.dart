@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:learnify_app/core/extensions/context_extensions.dart';
+import 'package:learnify_app/core/providers/database_provider.dart';
 import 'package:learnify_app/presentation/widgets/common_test_widget.dart';
 
-class RecommendedSection extends StatefulWidget {
+class RecommendedSection extends ConsumerWidget {
   const RecommendedSection({super.key});
 
   @override
-  State<RecommendedSection> createState() => _RecommendedSectionState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final recommendedTests = ref.watch(recommendedTestsProvider);
 
-class _RecommendedSectionState extends State<RecommendedSection> {
-  final List<Map<String, int>> testData = [
-    {'total': 10, 'answered': 0},
-    {'total': 15, 'answered': 0},
-    {'total': 5, 'answered': 0},
-  ];
+    if (recommendedTests.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
-  @override
-  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -38,18 +35,19 @@ class _RecommendedSectionState extends State<RecommendedSection> {
           child: Padding(
             padding: const EdgeInsets.only(left: 32.0), // initial left padding
             child: Row(
-              children: List.generate(testData.length, (index) {
-                final item = testData[index];
-                return Padding(
-                  padding: const EdgeInsets.only(
-                    right: 8.0,
-                  ), // space between cards
-                  child: CommonTestWidget(
-                    totalQuestions: item['total']!,
-                    answeredQuestions: item['answered']!,
-                  ),
-                );
-              }),
+              children:
+                  recommendedTests.map((test) {
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                        right: 8.0,
+                      ), // space between cards
+                      child: CommonTestWidget(
+                        test: test,
+                        totalQuestions: test.totalQuestions,
+                        answeredQuestions: test.answeredQuestions,
+                      ),
+                    );
+                  }).toList(),
             ),
           ),
         ),

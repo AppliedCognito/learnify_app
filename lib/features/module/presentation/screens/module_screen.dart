@@ -73,7 +73,7 @@ class ModuleScreen extends ConsumerWidget {
             child: ListView.builder(
               itemCount: 8,
               itemBuilder: (context, index) {
-                return ModuleExpansion(index: index);
+                return ModuleExpansion(index: index, paper: selectedPaper);
               },
             ),
           ),

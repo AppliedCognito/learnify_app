@@ -15,7 +15,8 @@ class CommonAppbar extends StatelessWidget {
       floating: false,
       // pinned: true,
       flexibleSpace: FlexibleSpaceBar(
-        titlePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        centerTitle: false,
+        titlePadding: const EdgeInsets.only(left: 16, bottom: 12),
         title: const Text(
           'Learnify',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
