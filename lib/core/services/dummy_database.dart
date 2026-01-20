@@ -9,7 +9,11 @@ import '../models/user_model.dart';
 class DummyDatabase {
   static final DummyDatabase _instance = DummyDatabase._internal();
   factory DummyDatabase() => _instance;
-  DummyDatabase._internal();
+  DummyDatabase._internal() {
+    initialize();
+  }
+
+  bool _isInitialized = false;
 
   // Current logged-in user
   UserModel get currentUser => _currentUser;
@@ -25,11 +29,15 @@ class DummyDatabase {
 
   /// Initialize the database with dummy data
   void initialize() {
+    if (_isInitialized) return;
+
     _initializeUsers();
     _initializeTests();
     _initializeModules();
     _initializeAchievements();
     _initializeLeaderboards();
+
+    _isInitialized = true;
   }
 
   void _initializeUsers() {
@@ -45,6 +53,8 @@ class DummyDatabase {
       streak: 56,
       points: 1250,
       rank: 25,
+      paper2Subject: 'Computer Science',
+      studySchedule: 'Daily',
     );
     _users.add(_currentUser);
 
@@ -511,5 +521,27 @@ class DummyDatabase {
       'streak': _currentUser.streak,
       'trophies': _currentUser.trophies,
     };
+  }
+
+  /// Update user preferences (Paper 2 subject and study schedule)
+  void updateUserPreferences({String? paper2Subject, String? studySchedule}) {
+    _currentUser = UserModel(
+      id: _currentUser.id,
+      name: _currentUser.name,
+      email: _currentUser.email,
+      profileImage: _currentUser.profileImage,
+      trophies: _currentUser.trophies,
+      streak: _currentUser.streak,
+      points: _currentUser.points,
+      rank: _currentUser.rank,
+      paper2Subject: paper2Subject ?? _currentUser.paper2Subject,
+      studySchedule: studySchedule ?? _currentUser.studySchedule,
+    );
+
+    // Update in the users list as well
+    final userIndex = _users.indexWhere((user) => user.id == _currentUser.id);
+    if (userIndex != -1) {
+      _users[userIndex] = _currentUser;
+    }
   }
 }

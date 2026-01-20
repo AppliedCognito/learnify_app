@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/quiz_model.dart';
 
 final currentQuestionProvider = StateProvider<int>((ref) => 0);
-final selectedOptionProvider = StateProvider<int?>((ref) => null);
+final answersProvider = StateProvider<Map<int, int>>((ref) => {});
 
 // Sample Questions
 final questionsProvider = Provider<List<Question>>(

@@ -7,6 +7,8 @@ class UserModel {
   final int streak;
   final int points;
   final int rank;
+  final String? paper2Subject;
+  final String? studySchedule;
 
   UserModel({
     required this.id,
@@ -17,6 +19,8 @@ class UserModel {
     required this.streak,
     required this.points,
     required this.rank,
+    this.paper2Subject,
+    this.studySchedule,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -29,6 +33,8 @@ class UserModel {
       streak: json['streak'] as int,
       points: json['points'] as int,
       rank: json['rank'] as int,
+      paper2Subject: json['paper2Subject'] as String?,
+      studySchedule: json['studySchedule'] as String?,
     );
   }
 
@@ -42,6 +48,8 @@ class UserModel {
       'streak': streak,
       'points': points,
       'rank': rank,
+      'paper2Subject': paper2Subject,
+      'studySchedule': studySchedule,
     };
   }
 }

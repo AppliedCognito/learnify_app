@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learnify_app/core/extensions/context_extensions.dart';
 import 'package:learnify_app/core/routes/router_constants.dart';
+import 'package:learnify_app/core/services/dummy_database.dart';
 import 'package:learnify_app/features/auth/presentation/widgets/onboarding_card.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -32,6 +33,27 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _goToNextPage() {
+    // Validate selections before proceeding
+    if (_currentPage == 1 && _selectedSubject == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select your Paper II subject'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (_currentPage == 2 && _selectedSchedule == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select your test schedule'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     if (_currentPage < 2) {
       _pageController.animateToPage(
         _currentPage + 1,
@@ -39,6 +61,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.linear,
       );
     } else {
+      // Save preferences and navigate to home
+      DummyDatabase().updateUserPreferences(
+        paper2Subject: _selectedSubject,
+        studySchedule: _selectedSchedule,
+      );
       context.pushNamed(RouterConstants.homeRouteName);
     }
   }
@@ -60,7 +87,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         extraWidget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: DropdownButtonFormField<String>(
-            value: _selectedSubject,
+            initialValue: _selectedSubject,
             decoration: InputDecoration(
               hintText: 'Select Subject',
               contentPadding: const EdgeInsets.symmetric(
@@ -74,10 +101,33 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
             items: const [
               DropdownMenuItem(
-                value: 'Computer science',
-                child: Text('Computer science'),
+                value: 'Computer Science',
+                child: Text('Computer Science'),
+              ),
+              DropdownMenuItem(
+                value: 'Mathematics',
+                child: Text('Mathematics'),
               ),
               DropdownMenuItem(value: 'Commerce', child: Text('Commerce')),
+              DropdownMenuItem(value: 'Physics', child: Text('Physics')),
+              DropdownMenuItem(value: 'Chemistry', child: Text('Chemistry')),
+              DropdownMenuItem(value: 'Economics', child: Text('Economics')),
+              DropdownMenuItem(value: 'English', child: Text('English')),
+              DropdownMenuItem(value: 'Hindi', child: Text('Hindi')),
+              DropdownMenuItem(value: 'History', child: Text('History')),
+              DropdownMenuItem(
+                value: 'Political Science',
+                child: Text('Political Science'),
+              ),
+              DropdownMenuItem(value: 'Geography', child: Text('Geography')),
+              DropdownMenuItem(value: 'Psychology', child: Text('Psychology')),
+              DropdownMenuItem(value: 'Sociology', child: Text('Sociology')),
+              DropdownMenuItem(value: 'Education', child: Text('Education')),
+              DropdownMenuItem(value: 'Management', child: Text('Management')),
+              DropdownMenuItem(
+                value: 'Library Science',
+                child: Text('Library Science'),
+              ),
             ],
             onChanged: (value) {
               setState(() {
@@ -95,7 +145,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         extraWidget: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: DropdownButtonFormField<String>(
-            value: _selectedSchedule,
+            initialValue: _selectedSchedule,
             decoration: InputDecoration(
               hintText: 'Select Frequency',
               contentPadding: const EdgeInsets.symmetric(
@@ -108,12 +158,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
             items: const [
-              DropdownMenuItem(value: 'Every day', child: Text('Every day')),
+              DropdownMenuItem(value: 'Daily', child: Text('Daily')),
               DropdownMenuItem(
-                value: 'Every 2 day',
-                child: Text('Every 2 day'),
+                value: 'Every 2 days',
+                child: Text('Every 2 days'),
+              ),
+              DropdownMenuItem(
+                value: 'Twice a week',
+                child: Text('Twice a week'),
               ),
               DropdownMenuItem(value: 'Weekly', child: Text('Weekly')),
+              DropdownMenuItem(value: 'Monthly', child: Text('Monthly')),
             ],
             onChanged: (value) {
               setState(() {

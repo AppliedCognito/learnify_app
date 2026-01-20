@@ -6,22 +6,32 @@ import '../provider/quiz_provider.dart';
 class OptionTile extends ConsumerWidget {
   final int optionIndex;
   final String optionText;
+  final VoidCallback? onTap;
 
   const OptionTile({
     super.key,
     required this.optionIndex,
     required this.optionText,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedOption = ref.watch(selectedOptionProvider);
+    final currentQuestionIndex = ref.watch(currentQuestionProvider);
+    final answers = ref.watch(answersProvider);
 
-    bool isSelected = selectedOption == optionIndex;
+    // Check if this option is selected for the current question
+    final isSelected = answers[currentQuestionIndex] == optionIndex;
 
     return GestureDetector(
       onTap: () {
-        ref.read(selectedOptionProvider.notifier).state = optionIndex;
+        // Update the answer for the current question
+        final currentAnswers = Map<int, int>.from(ref.read(answersProvider));
+        currentAnswers[currentQuestionIndex] = optionIndex;
+        ref.read(answersProvider.notifier).state = currentAnswers;
+
+        // Trigger the callback (e.g., for navigation)
+        onTap?.call();
       },
       child: Container(
         width: double.infinity,
@@ -34,11 +44,7 @@ class OptionTile extends ConsumerWidget {
             color: isSelected ? Colors.orangeAccent : Colors.black,
           ),
         ),
-        child: Text(
-          optionText,
-          style: context.textTheme.bodyLarge,
-          //  style: const TextStyle(fontSize: 16)
-        ),
+        child: Text(optionText, style: context.textTheme.bodyLarge),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -7,6 +8,7 @@ import '../provider/quiz_provider.dart';
 import '../widgets/progress_bar.dart';
 import '../widgets/question_progress_indicator.dart';
 import '../widgets/option_tile.dart';
+import 'quiz_completed_screen.dart';
 
 class QuizAttemptScreen extends ConsumerStatefulWidget {
   const QuizAttemptScreen({super.key});
@@ -17,30 +19,95 @@ class QuizAttemptScreen extends ConsumerStatefulWidget {
 
 class _QuizAttemptScreenState extends ConsumerState<QuizAttemptScreen> {
   late final PageController _pageController;
+  Timer? _timer;
+  int _totalTimeInSeconds = 0;
+  int _remainingTimeInSeconds = 0;
+  bool _isTimerStarted = false;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
+
+    // Start timer after frame callback to ensure providers are ready or just init here
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initTimer();
+    });
+  }
+
+  void _initTimer() {
+    final questions = ref.read(questionsProvider);
+    if (questions.isEmpty) return;
+
+    // Logic: 150 questions -> 180 minutes. 1 question = 1.2 minutes = 72 seconds.
+    final totalSeconds = (questions.length * 1.2 * 60).toInt();
+
+    setState(() {
+      _totalTimeInSeconds = totalSeconds;
+      _remainingTimeInSeconds = totalSeconds;
+      _isTimerStarted = true;
+    });
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_remainingTimeInSeconds > 0) {
+        setState(() {
+          _remainingTimeInSeconds--;
+        });
+      } else {
+        _timer?.cancel();
+        _submitQuiz();
+      }
+    });
+  }
+
+  void _submitQuiz() {
+    _timer?.cancel();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const QuizCompleteScreen()),
+    );
   }
 
   @override
   void dispose() {
     _pageController.dispose();
+    _timer?.cancel();
     super.dispose();
+  }
+
+  void _onOptionSelected(int questionIndex, int totalQuestions) {
+    // Auto advance if not the last question
+    if (questionIndex < totalQuestions - 1) {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (_pageController.hasClients) {
+          _pageController.nextPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final questions = ref.watch(questionsProvider);
     final currentQuestion = ref.watch(currentQuestionProvider);
+    final answers = ref.watch(answersProvider);
 
-    double progressValue = (currentQuestion + 1) / questions.length;
+    // Calculate time progress (1.0 to 0.0)
+    double progressValue =
+        _totalTimeInSeconds > 0
+            ? _remainingTimeInSeconds / _totalTimeInSeconds
+            : 1.0;
+
+    final isAllAnswered = answers.length == questions.length;
 
     return Scaffold(
       backgroundColor: const Color(0xFF7758FF),
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Top bar
             Padding(
@@ -62,22 +129,29 @@ class _QuizAttemptScreenState extends ConsumerState<QuizAttemptScreen> {
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
-                    // style: const TextStyle(
-                    //   color: Colors.white,
-                    //   fontWeight: FontWeight.w500,
-                    // ),
                   ),
                 ],
               ),
             ),
-            Gap(10),
+            const Gap(10),
 
-            // Progress bar
+            // Progress bar (Timer)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: ProgressBar(progress: progressValue),
             ),
-            Gap(10),
+
+            // Optional: Text Timer
+            if (_isTimerStarted)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  _formatTime(_remainingTimeInSeconds),
+                  style: const TextStyle(color: Colors.white70, fontSize: 12),
+                ),
+              ),
+
+            const Gap(10),
 
             // Question Progress Indicator (small lines)
             Padding(
@@ -86,7 +160,7 @@ class _QuizAttemptScreenState extends ConsumerState<QuizAttemptScreen> {
                 totalQuestions: questions.length,
               ),
             ),
-            Gap(24),
+            const Gap(24),
 
             Expanded(
               child: PageView.builder(
@@ -94,7 +168,6 @@ class _QuizAttemptScreenState extends ConsumerState<QuizAttemptScreen> {
                 itemCount: questions.length,
                 onPageChanged: (index) {
                   ref.read(currentQuestionProvider.notifier).state = index;
-                  ref.read(selectedOptionProvider.notifier).state = null;
                 },
                 itemBuilder: (context, index) {
                   final question = questions[index];
@@ -125,6 +198,11 @@ class _QuizAttemptScreenState extends ConsumerState<QuizAttemptScreen> {
                               (optionIndex) => OptionTile(
                                 optionIndex: optionIndex,
                                 optionText: question.options[optionIndex],
+                                onTap:
+                                    () => _onOptionSelected(
+                                      index,
+                                      questions.length,
+                                    ),
                               ),
                             ),
                           ],
@@ -135,28 +213,65 @@ class _QuizAttemptScreenState extends ConsumerState<QuizAttemptScreen> {
                 },
               ),
             ),
+
+            // Bottom Action Area
             Padding(
-              padding: const EdgeInsets.only(bottom: 60),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Scroll to see more',
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      color: Colors.white30,
-                    ),
-                  ),
-                  Icon(
-                    LucideIcons.chevronsDown,
-                    color: Colors.white30,
-                    size: 16,
-                  ),
-                ],
-              ),
+              padding: const EdgeInsets.only(bottom: 20, left: 16, right: 16),
+              child:
+                  isAllAnswered
+                      ? SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: _submitQuiz,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: const Color(0xFF7758FF),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            'Complete Quiz',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      )
+                      : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Scroll to see more',
+                            style: context.textTheme.bodyMedium?.copyWith(
+                              color: Colors.white30,
+                            ),
+                          ),
+                          const Icon(
+                            LucideIcons.chevronsDown,
+                            color: Colors.white30,
+                            size: 16,
+                          ),
+                        ],
+                      ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  String _formatTime(int totalSeconds) {
+    int hours = totalSeconds ~/ 3600;
+    int minutes = (totalSeconds % 3600) ~/ 60;
+    int seconds = totalSeconds % 60;
+
+    if (hours > 0) {
+      return '$hours:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+    } else {
+      return '$minutes:${seconds.toString().padLeft(2, '0')}';
+    }
   }
 }
